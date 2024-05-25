@@ -5,34 +5,46 @@ import {
   deleteMarkdownFile,
 } from "../utils/helpers";
 
-export const useMarkdownManager = () => {
-  const [markdownContent, setMarkdownContent] = React.useState("");
-  const [files, setFiles] = React.useState<
-    { id: string; content: string | null }[]
-  >([]);
+import create, { StoreApi } from "zustand";
 
-  React.useEffect(() => {
-    return setFiles(getMarkdownFiles());
-  }, []);
+interface Markdown {
+  id: string;
+  content: string | null;
+}
 
-  const handleSave = () => {
-    if (markdownContent.trim() === "") return; // if no content, do nothing
-
-    const id = saveMarkdownFile(markdownContent);
-    setFiles([...files, { id, content: markdownContent }]);
-    setMarkdownContent("");
-  };
-
-  const handleDelete = (id: string) => {
-    deleteMarkdownFile(id);
-    setFiles(files.filter((file) => file.id !== id));
-  };
-
-  return {
-    markdownContent,
-    setMarkdownContent,
-    files,
-    handleSave,
-    handleDelete,
-  };
+type MarkdownManagerState = {
+  markdownContent: string;
+  setMarkdownContent: (content: string) => void;
+  files: Markdown[];
+  handleSave: () => void;
+  handleDelete: (id: string) => void;
 };
+
+export const useMarkdownManager = create<MarkdownManagerState>(
+  (
+    set: StoreApi<MarkdownManagerState>["setState"],
+    get: StoreApi<MarkdownManagerState>["getState"]
+  ) => ({
+    markdownContent: "",
+    setMarkdownContent: (content: string) => set({ markdownContent: content }),
+    files: getMarkdownFiles().map((file) => ({
+      id: file.id,
+      content: file.content,
+    })),
+    handleSave: () => {
+      const { markdownContent, files } = get();
+      if (markdownContent.trim() === "") return; // if no content, do nothing
+
+      const id = saveMarkdownFile(markdownContent);
+      set({
+        files: [...files, { id, content: markdownContent }],
+        markdownContent: "",
+      });
+    },
+    handleDelete: (id: string) => {
+      const { files } = get();
+      deleteMarkdownFile(id);
+      set({ files: files.filter((file) => file.id !== id) });
+    },
+  })
+);

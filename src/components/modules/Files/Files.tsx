@@ -28,3 +28,8 @@ export const Files: React.FC<FilesProps> = ({ files, handleDelete }) => (
     ))}
   </div>
 );
+
+export const ConnectedFiles = () => {
+  const { files, handleDelete } = useMarkdownManager();
+  return <Files files={files} handleDelete={handleDelete} />;
+};
