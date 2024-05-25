@@ -5,7 +5,14 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "github-markdown-css/github-markdown.css";
 import { MarkdownManager } from "./components/modules/MarkdownManager/MarkdownManager";
 
-const routes: Record<string, { path: string; component: JSX.Element }> = {
+export type Routes = "/" | "/files" | "/editor" | "/preview";
+
+export type RouteProps = {
+  path: string;
+  component: JSX.Element;
+};
+
+export const routes: Record<Routes, RouteProps> = {
   "/": { path: "/", component: <MarkdownManager /> },
   "/files": { path: "/files", component: <div>Files</div> },
   "/editor": { path: "/editor", component: <div>Editor</div> },
