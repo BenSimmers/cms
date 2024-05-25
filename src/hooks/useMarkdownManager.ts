@@ -5,7 +5,7 @@ import {
   deleteMarkdownFile,
 } from "../utils/helpers";
 
-import create, { StoreApi } from "zustand";
+import { create, StoreApi } from "zustand";
 
 interface Markdown {
   id: string;
