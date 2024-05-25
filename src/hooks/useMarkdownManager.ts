@@ -18,6 +18,9 @@ type MarkdownManagerState = {
   files: Markdown[];
   handleSave: () => void;
   handleDelete: (id: string) => void;
+  getMarkdownFileById: (id: string) => Markdown | undefined;
+  getMarkdownByTitle: (title: string) => Markdown | undefined;
+  searchMarkdown: (query: string) => Markdown[];
 };
 
 export const useMarkdownManager = create<MarkdownManagerState>(
@@ -46,5 +49,16 @@ export const useMarkdownManager = create<MarkdownManagerState>(
       deleteMarkdownFile(id);
       set({ files: files.filter((file) => file.id !== id) });
     },
+
+    getMarkdownFileById: (id: string) =>
+      get().files.find((file) => file.id === id),
+
+    getMarkdownByTitle: (title: string) =>
+      get().files.find((file) => file.id === title),
+
+    searchMarkdown: (query: string) =>
+      get().files.filter((file) =>
+        file.content?.toLowerCase().includes(query.toLowerCase())
+      ),
   })
 );
