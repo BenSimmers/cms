@@ -1,12 +1,13 @@
 export type ButtonProps = {
   text: string;
   onClick: () => void;
+  className?: string;
 };
 
-export const Button: React.FC<ButtonProps> = ({ text, onClick }) => (
+export const Button: React.FC<ButtonProps> = ({ text, onClick, className }) => (
   <button
     onClick={onClick}
-    className="inline-block px-4 py-2 mb-4 text-white bg-green-500 rounded hover:bg-green-600"
+    className={`px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 ${className}`}
   >
     {text}
   </button>
