@@ -14,10 +14,8 @@ export const MarkdownManager: React.FC = () => {
   } = useMarkdownManager();
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-      <TextArea value={markdownContent} onChange={setMarkdownContent} />
-      <Button text="Save" onClick={handleSave} />
-      <ConnectedFiles />
+    <div>
+
       <MarkdownViewer markdown={markdownContent} />
     </div>
   );
